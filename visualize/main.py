@@ -9,7 +9,7 @@ BasePath = CurrentPath.parent
 
 
 class Config:
-    GRAPHIC_LEN: int = 100
+    GRAPHIC_LEN: int = 1000
 
 
 def generate_random_hex():
@@ -18,9 +18,14 @@ def generate_random_hex():
 
 
 def main():
-    df = pd.read_csv(BasePath / "submission.csv")
-    df = df[:Config.GRAPHIC_LEN]
+    df = pd.read_csv(BasePath / "test.csv")
+    df = df.query("ego_id == 8")
+    df = df.sort_values(["ego_id", "u", "v"])
+    df["t"] = df["t"].fillna(0)
+
     size = df.shape[0]
+    print(df.head(20))
+
     net = Network()
 
     nodes = set()
@@ -32,14 +37,14 @@ def main():
             colors.update({ego_id: generate_random_hex()})
         u = f'{ego_id}_{int(row["u"])}'
         v = f'{ego_id}_{int(row["v"])}'
-
+        t = int(row["t"])
         if u not in nodes:
             nodes.add(u)
             net.add_node(u, label=f"Node {u}", color=colors[ego_id])
         if v not in nodes:
             nodes.add(v)
             net.add_node(v, label=f"Node {v}", color=colors[ego_id])
-        net.add_edge(u, v)
+        net.add_edge(u, v, value=t)
 
     net.toggle_physics(True)
     try:
