@@ -8,6 +8,10 @@ CurrentPath = Path(__file__).resolve().parent
 BasePath = CurrentPath.parent
 
 
+class Config:
+    GRAPHIC_LEN: int = 100
+
+
 def generate_random_hex():
     r = lambda: random.randint(0, 255)
     return '#%02X%02X%02X' % (r(), r(), r())
@@ -15,7 +19,7 @@ def generate_random_hex():
 
 def main():
     df = pd.read_csv(BasePath / "submission.csv")
-    df = df[:10]
+    df = df[:Config.GRAPHIC_LEN]
     size = df.shape[0]
     net = Network()
 
