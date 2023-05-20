@@ -1,7 +1,11 @@
-import pandas as pd
-import numpy as np
-from pyvis.network import Network
 import random
+from pathlib import Path
+
+import pandas as pd
+from pyvis.network import Network
+
+CurrentPath = Path(__file__).resolve().parent
+BasePath = CurrentPath.parent
 
 
 def generate_random_hex():
@@ -10,8 +14,8 @@ def generate_random_hex():
 
 
 def main():
-    df = pd.read_csv("submission.csv")
-    df = df[:1000]
+    df = pd.read_csv(BasePath / "submission.csv")
+    df = df[:10]
     size = df.size
     net = Network()
 
@@ -34,8 +38,10 @@ def main():
         net.add_edge(u, v)
 
     net.toggle_physics(True)
-    net.show('mygraph.html')
-
+    try:
+        net.show((CurrentPath / "out" / 'mygraph.html').as_posix())
+    except FileNotFoundError:
+        pass
 
 if __name__ == "__main__":
     main()
