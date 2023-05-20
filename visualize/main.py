@@ -16,13 +16,13 @@ def generate_random_hex():
 def main():
     df = pd.read_csv(BasePath / "submission.csv")
     df = df[:10]
-    size = df.size
+    size = df.shape[0]
     net = Network()
 
     nodes = set()
     colors = {}
     for index, row in df.iterrows():
-        print(f"{index}/ {size}")
+        print(f"{index + 1} / {size}")
         ego_id = int(row["ego_id"])
         if ego_id not in colors:
             colors.update({ego_id: generate_random_hex()})
